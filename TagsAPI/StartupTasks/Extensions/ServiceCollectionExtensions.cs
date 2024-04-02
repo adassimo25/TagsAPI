@@ -1,0 +1,60 @@
+﻿namespace TagsAPI.StartupTasks.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddStartupTask<Task>(this IServiceCollection services)
+            where Task : class, IStartupTask
+        {
+            services.AddTransient<IStartupTask, Task>();
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterGenericTypes(this IServiceCollection services, params Type[] types)
+        {
+            foreach (var type in types)
+            {
+                var assembly = type.Assembly;
+
+                foreach (var assemblyType in assembly.GetTypes().Where(aT => aT.IsClass && !aT.IsAbstract))
+                {
+                    foreach (var i in assemblyType.GetInterfaces())
+                    {
+                        if (i.IsGenericType && i.GetGenericTypeDefinition() == type)
+                        {
+                            var interfaceType = type.MakeGenericType(i.GetGenericArguments());
+
+                            services.AddTransient(interfaceType, assemblyType);
+                        }
+                    }
+                }
+            }
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterMarkerTypes(this IServiceCollection services, params Type[] types)
+        {
+            foreach (var type in types)
+            {
+                var assembly = type.Assembly;
+
+                foreach (var assemblyType in assembly.GetTypes().Where(aT => aT.IsClass && !aT.IsAbstract))
+                {
+                    if (type.IsAssignableFrom(assemblyType))
+                    {
+                        foreach (var i in assemblyType.GetInterfaces())
+                        {
+                            if (i != type && type.IsAssignableFrom(i))
+                            {
+                                services.AddTransient(i, assemblyType);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return services;
+        }
+    }
+}

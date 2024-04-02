@@ -1,0 +1,6 @@
+@TagsAPI_HostAddress = https://localhost:5001
+
+GET {{TagsAPI_HostAddress}}/api/tags
+Accept: application/json
+
+###
