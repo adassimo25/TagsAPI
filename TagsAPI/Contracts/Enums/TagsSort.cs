@@ -1,6 +1,6 @@
 ﻿namespace TagsAPI.Contracts.Enums
 {
-    public enum TagsOrder
+    public enum TagsSort
     {
         Count,
         Share,

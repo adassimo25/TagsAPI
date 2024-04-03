@@ -7,7 +7,7 @@ namespace TagsAPI.DataAccess
     public static class QueryExtensions
     {
         public const int MinPageSize = 1;
-        public const int MaxPageSize = 100;
+        public const int MaxPageSize = Consts.Pagination.MaxPageSize;
 
         public static IQueryable<TResult> Paginated<TSource, TResult>(
             this IQueryable<TResult> queryable,

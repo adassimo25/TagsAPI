@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Linq.Expressions;
 using TagsAPI.Contracts.Dtos;
 using TagsAPI.Contracts.Enums;
 using TagsAPI.DataAccess;
@@ -17,9 +20,35 @@ namespace TagsAPI.Services
         private readonly IStackOverflowAccessService stackOverflowAccessService = stackOverflowAccessService;
         private readonly ILogger<TagsService> logger = logger;
 
-        public Task<IEnumerable<TagDto>> GetTags(int page, int limit, TagsOrder order)
+        public async Task<IEnumerable<TagDto>> GetTags(int page, int pageSize, TagsSort sort, Order order)
         {
-            throw new NotImplementedException();
+            var tagsPaginatedQuery = new TagsPaginatedQuery
+            {
+                PageNumber = page,
+                PageSize = pageSize
+            };
+
+            Expression<Func<Tag, object>> sortBy = sort switch
+            {
+                TagsSort.Count => tag => tag.Count,
+                TagsSort.Share => tag => tag.Share,
+                _ => throw new ArgumentException($"Invalid sort option: {sort}"),
+            };
+
+            var tagsPaginated = await dbContext.Tags
+                .AsNoTracking()
+                .OrderBy(sortBy, order == Order.Desc)
+                .Paginated(tagsPaginatedQuery)
+                .Select(t => new TagDto()
+                {
+                    Name = t.Name,
+                    Count = t.Count,
+                    Share = (float)t.Share,
+                    ModificationDate = t.ModificationDate
+                })
+                .ToListAsync();
+
+            return tagsPaginated;
         }
 
         public async Task<SynchronizationResultDto> Synchronize()
@@ -65,7 +94,7 @@ namespace TagsAPI.Services
             {
                 Created = tagsToAdd.Count,
                 Updated = tagsToUpdate.Count,
-                Deleted = tagsToUpdate.Count
+                Deleted = tagsFromDb.Count
             };
 
             logger.LogInformation("Synchronization result: {SynchronizationResult}", JsonConvert.SerializeObject(result));

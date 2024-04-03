@@ -44,7 +44,7 @@
                 updated = true;
             }
 
-            if (Share != share)
+            if (Math.Abs(Share - share) >= Math.Pow(10, -6))
             {
                 ChangeShare(share, updateTime);
                 updated = true;

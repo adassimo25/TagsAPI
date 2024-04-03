@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Requests\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
