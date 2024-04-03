@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using TagsAPI;
 using TagsAPI.DataAccess;
 using TagsAPI.DataAccess.Repositories;
+using TagsAPI.Exceptions;
 using TagsAPI.Services;
 using TagsAPI.Services.Interfaces;
 using TagsAPI.StartupTasks.AddMigrations;
@@ -38,17 +40,23 @@ services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "Web API for StackOverflow Tags",
     });
+
+    options.CustomSchemaIds(type => type.FullName);
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
 services
     .AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+services.AddExceptionHandler<AppExceptionHandler>();
+
 var app = builder.Build();
+
+app.UseExceptionHandler(_ => { });
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {

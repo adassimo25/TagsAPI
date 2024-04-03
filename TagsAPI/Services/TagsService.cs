@@ -1,7 +1,5 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Globalization;
 using System.Linq.Expressions;
 using TagsAPI.Contracts.Dtos;
 using TagsAPI.Contracts.Enums;

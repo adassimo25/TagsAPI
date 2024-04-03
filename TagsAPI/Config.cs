@@ -16,7 +16,7 @@
             public class StackOverflowTags : Section
             {
                 public string Url { get; set; } = null!;
-                public int Minimal {  get; set; }
+                public int Minimal { get; set; }
                 public int PageSize { get; set; }
             }
         }

@@ -25,7 +25,7 @@ namespace TagsAPI.Services
 
                     lock (tagsFromAPI)
                     {
-                        tagsFromAPI.AddRange(pageTags.Items);
+                        tagsFromAPI.AddRange(pageTags.Items ?? new List<TagFromAPIDto>());
                     }
                 }));
             }
