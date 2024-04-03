@@ -33,8 +33,8 @@ namespace TagsAPI.DataAccess
                 cfg.Property(e => e.Share)
                     .IsRequired()
                     .HasDefaultValue(0)
-                    .HasPrecision(18, 2);
-                cfg.ToTable(t => t.HasCheckConstraint("CK_Tag_Share", "Share >= 0 AND Share <= 1"));
+                    .HasPrecision(3, 9);
+                cfg.ToTable(t => t.HasCheckConstraint("CK_Tag_Share", "Share >= 0 AND Share <= 100"));
             });
         }
     }

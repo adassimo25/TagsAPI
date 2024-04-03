@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TagsAPI.Contracts.Dtos;
 using TagsAPI.Services.Interfaces;
 
 namespace TagsAPI.Controllers
@@ -16,6 +17,15 @@ namespace TagsAPI.Controllers
         public ActionResult Todo()
         {
             return Ok();
+        }
+
+        /// <summary>
+        /// Synchronizes database with tags from StackOverflow API
+        /// </summary>
+        [HttpPost("Synchronize")]
+        public async Task<ActionResult<SynchronizationResultDto>> Synchronize()
+        {
+            return Ok(await tagsService.Synchronize());
         }
     }
 }

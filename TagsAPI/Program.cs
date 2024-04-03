@@ -15,16 +15,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services!;
 
-services.AddDbContext<TagsDbContext>(options =>
-                options.UseSqlServer(Config.Database.ConnectionString(builder.Configuration)));
+services.AddDbContext<TagsDbContext>(options => options.UseSqlServer(Config.Database.ConnectionString(builder.Configuration)));
 
+services.RegisterAppsettingsSections(builder.Configuration);
 services.RegisterGenericTypes(
     typeof(IRepository<,>),
     typeof(IRequestValidator<>));
-
 services.RegisterMarkerTypes(typeof(IService));
 
-services.AddScoped(typeof(IStackOverflowAPIService<>), typeof(StackOverflowAPIService<>));
+services.AddScoped(typeof(IExternalAPIService<>), typeof(ExternalAPIService<>));
 
 services.AddStartupTask<AddMigrationsStartupTask>();
 services.AddStartupTask<SynchronizeTagsStartupTask>();

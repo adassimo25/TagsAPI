@@ -12,7 +12,7 @@ using TagsAPI.DataAccess;
 namespace TagsAPI.Migrations
 {
     [DbContext(typeof(TagsDbContext))]
-    [Migration("20240402173604_Init")]
+    [Migration("20240403011153_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -49,8 +49,8 @@ namespace TagsAPI.Migrations
 
                     b.Property<double>("Share")
                         .ValueGeneratedOnAdd()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("float(18)")
+                        .HasPrecision(3, 9)
+                        .HasColumnType("float(3)")
                         .HasDefaultValue(0.0);
 
                     b.HasKey("Id");
@@ -62,7 +62,7 @@ namespace TagsAPI.Migrations
                         {
                             t.HasCheckConstraint("CK_Tag_Count", "Count >= 0");
 
-                            t.HasCheckConstraint("CK_Tag_Share", "Share >= 0 AND Share <= 1");
+                            t.HasCheckConstraint("CK_Tag_Share", "Share >= 0 AND Share <= 100");
                         });
                 });
 #pragma warning restore 612, 618

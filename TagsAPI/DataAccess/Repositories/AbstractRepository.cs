@@ -39,6 +39,12 @@ namespace TagsAPI.DataAccess.Repositories
             DbContext.SaveChanges();
         }
 
+        public void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            DbSet.UpdateRange(entities);
+            DbContext.SaveChanges();
+        }
+
         public TEntity Find(TIdentity id)
         {
             return DbSet.Find(id)!;
@@ -46,31 +52,37 @@ namespace TagsAPI.DataAccess.Repositories
 
         public Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Add(entity);
+            DbSet.Add(entity);
             return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            AddRange(entities);
+            DbSet.AddRange(entities);
             return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Remove(entity);
+            DbSet.Remove(entity);
             return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task RemoveRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            RemoveRange(entities);
+            DbSet.RemoveRange(entities);
             return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Update(entity);
+            DbSet.Update(entity);
+            return DbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            DbSet.UpdateRange(entities);
             return DbContext.SaveChangesAsync(cancellationToken);
         }
 
@@ -90,6 +102,8 @@ namespace TagsAPI.DataAccess.Repositories
 
         void Update(TEntity entity);
 
+        void UpdateRange(IEnumerable<TEntity> entities);
+
         TEntity Find(TIdentity id);
 
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
@@ -101,6 +115,8 @@ namespace TagsAPI.DataAccess.Repositories
         Task RemoveRangeAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = default);
 
         Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         Task<TEntity> FindAsync(TIdentity id, CancellationToken cancellationToken = default);
     }
