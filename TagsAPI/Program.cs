@@ -9,8 +9,8 @@ using TagsAPI.Exceptions;
 using TagsAPI.Services;
 using TagsAPI.Services.Interfaces;
 using TagsAPI.StartupTasks.AddMigrations;
+using TagsAPI.StartupTasks.BackgroundServices;
 using TagsAPI.StartupTasks.Extensions;
-using TagsAPI.StartupTasks.SynchronizeTags;
 using TagsAPI.Validators.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +28,8 @@ services.RegisterMarkerTypes(typeof(IService));
 services.AddScoped(typeof(IExternalAPIService<>), typeof(ExternalAPIService<>));
 
 services.AddStartupTask<AddMigrationsStartupTask>();
-services.AddStartupTask<SynchronizeTagsStartupTask>();
+
+services.AddHostedService<SynchronizeTagsBackgroundService>();
 
 services.AddCors();
 

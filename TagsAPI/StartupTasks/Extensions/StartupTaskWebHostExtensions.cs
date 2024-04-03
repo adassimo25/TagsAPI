@@ -1,6 +1,4 @@
-﻿using TagsAPI.Exceptions;
-
-namespace TagsAPI.StartupTasks.Extensions
+﻿namespace TagsAPI.StartupTasks.Extensions
 {
     public static class StartupTaskWebHostExtensions
     {
@@ -23,8 +21,8 @@ namespace TagsAPI.StartupTasks.Extensions
             }
             catch (Exception e)
             {
-                var message = $"Startup task message: {e.Message}";
-                throw new StartupTaskException(message, e.StackTrace!);
+                var message = $"{e.Message}\nStack trace: {e.StackTrace}";
+                throw new Exception(message);
             }
         }
     }

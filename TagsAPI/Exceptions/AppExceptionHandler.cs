@@ -15,7 +15,6 @@ namespace TagsAPI.Exceptions
             {
                 ArgumentException => (StatusCodes.Status400BadRequest, message, null),
                 ExternalAPIException => (StatusCodes.Status500InternalServerError, message, stackTrace),
-                StartupTaskException => (StatusCodes.Status500InternalServerError, message, stackTrace),
                 _ => (StatusCodes.Status500InternalServerError, $"Something went wrong! {message}", null)
             };
 
@@ -24,7 +23,8 @@ namespace TagsAPI.Exceptions
 
             await httpContext.Response.WriteAsync(errorMessage, cancellationToken);
 
-            logger.LogError(exception, exception.Message, errorStackTrace);
+            logger.LogError(errorMessage);
+            logger.LogError(errorStackTrace);
 
             return true;
         }

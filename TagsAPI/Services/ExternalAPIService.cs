@@ -25,7 +25,7 @@ namespace TagsAPI.Services
                 using var reader = new StreamReader(gzipStream);
                 responseContent = await reader.ReadToEndAsync();
 
-                if (response.StatusCode != HttpStatusCode.OK)
+                if (response.StatusCode != HttpStatusCode.Created)
                 {
                     throw new Exception("Request failed");
                 }
@@ -36,9 +36,8 @@ namespace TagsAPI.Services
             }
             catch (Exception e)
             {
-                var message = $"ExternalAPI message: {e.Message}\n" +
-                    $"ExternalAPI response status: {response.StatusCode}\n" +
-                    $"ExternalAPI response content: {responseContent}";
+                var message = $"ExternalAPI error. Message: {e.Message}. Response status: {response.StatusCode}. " +
+                    $"Response content: {responseContent}";
                 throw new ExternalAPIException(message, e.StackTrace!);
             }
         }
