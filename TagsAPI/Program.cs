@@ -80,3 +80,6 @@ app.MapControllers();
 app.MapDefaultControllerRoute();
 
 await app.RunWithTasksAsync();
+
+public partial class Program
+{ }
