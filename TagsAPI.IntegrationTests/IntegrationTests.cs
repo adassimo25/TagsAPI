@@ -45,7 +45,7 @@ namespace TagsAPI.IntegrationTests
                         }
 
                         var synchronizeTagsBackgroundService = services
-                            .FirstOrDefault(sd => sd.ServiceType == typeof(SynchronizeTagsBackgroundService));
+                            .FirstOrDefault(sd => sd.ImplementationType == typeof(SynchronizeTagsBackgroundService));
                         if (synchronizeTagsBackgroundService is not null)
                         {
                             services.Remove(synchronizeTagsBackgroundService);
