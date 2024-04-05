@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  tags_api:
+    container_name: tags_api
+    build:
+      context: .
+      dockerfile: TagsAPI/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__Database: "Server=tags_db;Database=TagsDb;User Id=SA;Password=Password123!;TrustServerCertificate=True;Connect Timeout=10;"
+    depends_on:
+      - tags_db
+      - tags_api_unit_tests
+      - tags_api_integration_tests
+  
+  tags_db:
+    container_name: tags_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Password123!"
+      ACCEPT_EULA: "Y"
+
+  tags_api_unit_tests:
+    container_name: tags_api_unit_tests
+    build:
+      context: .
+      dockerfile: TagsAPI.UnitTests/Dockerfile
+
+  tags_api_integration_tests:
+    container_name: tags_api_integration_tests
+    build:
+      context: .
+      dockerfile: TagsAPI.IntegrationTests/Dockerfile

@@ -25,7 +25,7 @@ namespace TagsAPI.Services
                 using var reader = new StreamReader(gzipStream);
                 responseContent = await reader.ReadToEndAsync();
 
-                if (response.StatusCode != HttpStatusCode.Created)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new Exception("Request failed");
                 }
